@@ -12,7 +12,8 @@ function Home() {
     const [transactionHash, setTransactionHash] = useState('');
     const [senderName, setSenderName] = useState('');
     const [receiverName, setReceiverName] = useState('');
-
+    const [etherscanUrl] = useState('');
+    
     const handleSendETH = async () => {
 
         try {
@@ -22,13 +23,14 @@ function Home() {
             const gasPrice = await web3.eth.getGasPrice();
             const nonce = await web3.eth.getTransactionCount(senderAccount.address);
             const weiToSend = web3.utils.toWei(amountToSend, 'ether');
+            const etherscanUrl = `https://sepolia.etherscan.io/address/${recipientAddress}`;
 
             const txData = web3.utils.utf8ToHex(`Sender: ${senderName}, Receiver: ${receiverName}`);
 
             const txObject = {
                 nonce: web3.utils.toHex(nonce),
                 gasPrice: web3.utils.toHex(gasPrice),
-                gasLimit: web3.utils.toHex(21528), // Gas limit for a standard ETH transfer
+                gasLimit: web3.utils.toHex(21544), // Gas limit for a standard ETH transfer
                 to: recipientAddress,
                 value: web3.utils.toHex(weiToSend),
                 data: txData, // Include sender and receiver names in the transaction data
@@ -134,6 +136,9 @@ function Home() {
                     <p>Receiver Name: {receiverName}</p>
 
                     <p>Transaction Faucets: {amountToSend}</p>
+                    
+                    <a href={`https://sepolia.etherscan.io/address/${recipientAddress}`}>Etherscan</a>
+
                 </div>
             )}
 
